@@ -4,9 +4,9 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note note: <NEW NOTE> GET https://studies.cs.helsinki.fi/exampleapp/notes
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note        note: <NEW NOTE>
     activate server
-    server-->>browser: HTML document
+    server-->>browser: URL Redirect (ask browser to make another GET request to address defined in the header's location)
     deactivate server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
