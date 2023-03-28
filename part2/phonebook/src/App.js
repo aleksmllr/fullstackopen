@@ -1,48 +1,16 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
-
-const Filter = ({ value, onChange}) => {
-  return (
-    <>
-      filter shown with <input value={value} onChange={onChange}/>
-    </>
-  )
-}
-
-const PersonForm = ({ addPerson, newName, handlePersonChange, newNumber, handleNumberChange}) => {
-  return (
-    <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handlePersonChange}/>
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-  )
-}
-
-const Persons = ({ personsToShow, deletePerson }) => {
-  
-  return (
-    <div>
-      {personsToShow.map(person => 
-      <div key={person.id}>
-        {person.name} {person.number} <button onClick={() => deletePerson(person.id)}>delete</button>
-      </div>)
-      }
-    </div>
-  )
-}
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService
@@ -61,9 +29,27 @@ const App = () => {
         personService
           .update(found.id, updatedPerson)
           .then(returnedPerson => {
+            const notification = {
+              message: `${returnedPerson.name} number has been updated to ${returnedPerson.number}`,
+              color : 'green'
+            }
+            setNotification(notification)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
             setPersons(persons.map(person => person.id != found.id ? person : updatedPerson))
             setNewName('')
             setNewNumber('')
+          })
+          .catch(error => {
+            const notification = {
+              message: `Information of ${found.name} has already been removed from server`,
+              color : 'red'
+            }
+            setNotification(notification)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
           })
       }
       return
@@ -77,10 +63,27 @@ const App = () => {
     personService
       .create(personObject)
       .then(returnedPerson => {
-        console.log('This object is being added to the db: ', returnedPerson)
+        const notification = {
+          message: `Added ${returnedPerson.name}`,
+          color : 'green'
+        }
+        setNotification(notification)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
+      })
+      .catch(error => {
+        const notification = {
+          message: `There was an issue adding ${personObject.name} to the phonebook`,
+          color : 'red'
+        }
+        setNotification(notification)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
   }
 
@@ -91,8 +94,26 @@ const App = () => {
       personService
       .deletePerson(id)
       .then(() => {
+        const notification = {
+          message: `${person.name} has been removed from the phonebook.`,
+          color : 'green'
+        }
+        setNotification(notification)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
         const updatedPersons = persons.filter(person => person.id !== id)
         setPersons(updatedPersons)
+      })
+      .catch(error => {
+        const notification = {
+          message: `There was a problem trying to remove ${person.name} from the phonebook`,
+          color : 'red'
+        }
+        setNotification(notification)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
     }
   }
@@ -116,6 +137,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter value={newFilter} onChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm 
