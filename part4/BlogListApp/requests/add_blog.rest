@@ -2,9 +2,15 @@ GET http://localhost:3001/api/blogs/
 ###
 POST http://localhost:3001/api/blogs/
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZWtzbWxsciIsImlkIjoiNjQ0NzExNDhmMjgxMWU5ZDEwZDIyZWI4IiwiaWF0IjoxNjgyMzkwNDQwLCJleHAiOjE2ODIzOTQwNDB9.AsS-A-_TKdfdYHeRZTbD15D1C_hlP9OhI9UVKYJ47PQ
 
 {
-    "title": "John Stakssssss",
-    "url": "https://www.youtube.com/",
-    "likes": 5
+    "title": "----<3---7--",
+    "url": "xdef.ca",
+    "author": "Mark Rubinn",
+    "likes": 5,
+    "userId": "64471148f2811e9d10d22eb8"
 }
+###
+DELETE http://localhost:3001/api/blogs/644742e4dbe7b1b3f27ba9d9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFsZWtzbWxsciIsImlkIjoiNjQ0NzExNDhmMjgxMWU5ZDEwZDIyZWI4IiwiaWF0IjoxNjgyMzkwNDQwLCJleHAiOjE2ODIzOTQwNDB9.AsS-A-_TKdfdYHeRZTbD15D1C_hlP9OhI9UVKYJ47PQ
