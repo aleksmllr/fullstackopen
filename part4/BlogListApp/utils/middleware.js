@@ -49,7 +49,6 @@ const extractUser = async (request, response, next) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.startsWith('Bearer ')) {
     request.token = authorization.replace('Bearer ', '')
-    // console.log('token: ', authorization.replace('Bearer ', ''))
 
     const decodedToken = jwt.verify(
       authorization.replace('Bearer ', ''),
@@ -61,8 +60,7 @@ const extractUser = async (request, response, next) => {
 
     const user = await User.findById(decodedToken.id)
     request.user = user
-    // console.log('User (mid): ', user)
-  } else return response.status(401).json({ error: 'ya feel me' })
+  } else return response.status(401).json({ error: 'authorization error' })
 
   next()
 }
